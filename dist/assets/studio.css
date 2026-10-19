@@ -7,3 +7,6 @@
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}.project>a:hover .project-stage{transform:none}.solid-link:hover{transform:none}}
 
 .work-opening h1,.investment-heading h1{font-size:clamp(44px,5.2vw,76px)}@media(max-width:700px){.work-opening h1,.investment-heading h1{font-size:44px}}
+
+/* Interactive logo globe */
+.sculpture-stage{contain:layout paint;cursor:grab}.sculpture-stage canvas{touch-action:pan-y}.sculpture-fallback{border:1px solid #9aa68e;box-shadow:inset 0 0 50px #b5c0a944;transform:none;background:repeating-linear-gradient(0deg,transparent 0 29px,#a5af9d55 30px 31px);width:76%;left:14%;top:12%}.motion-control{cursor:pointer}
