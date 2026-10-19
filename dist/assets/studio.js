@@ -41,13 +41,13 @@ if(canvas){
  function sprite(kind){const c=document.createElement('canvas');c.width=c.height=80;const g=c.getContext('2d');g.translate(40,40);g.lineWidth=4;g.lineJoin='round';g.lineCap='round';
  const path=(p,fill)=>{g.beginPath();p.forEach(([x,y],i)=>i?g.lineTo(x,y):g.moveTo(x,y));g.closePath();if(fill)g.fill();else g.stroke()};
  const dot=(x,y,r,color)=>{g.fillStyle=color;g.beginPath();g.arc(x,y,r,0,TAU);g.fill()};
- if(kind===0){g.strokeStyle='#238da1';for(let a=0;a<3;a++){g.save();g.rotate(a*Math.PI/3);g.beginPath();g.ellipse(0,0,30,11,0,0,TAU);g.stroke();g.restore()}dot(0,0,5,'#238da1')}
+ if(kind===0){g.strokeStyle='#61dafb';for(let a=0;a<3;a++){g.save();g.rotate(a*Math.PI/3);g.beginPath();g.ellipse(0,0,30,11,0,0,TAU);g.stroke();g.restore()}dot(0,0,5,'#61dafb')}
  else if(kind===1){for(const [x,y,color] of [[-10,-20,'#f24e1e'],[10,-20,'#ff7262'],[-10,0,'#a259ff'],[10,0,'#1abcfe'],[-10,20,'#0acf83']])dot(x,y,10,color)}
  else if(kind===2||kind===3){g.fillStyle=kind===2?'#e8552d':'#287ac0';path([[-27,-30],[27,-30],[22,25],[0,33],[-22,25]],true);g.fillStyle='#fff';g.font='bold 44px Arial';g.textAlign='center';g.fillText(kind===2?'5':'3',0,18)}
  else if(kind===4||kind===5){g.fillStyle=kind===4?'#e2bd20':'#3178c6';g.fillRect(-29,-29,58,58);g.fillStyle=kind===4?'#242820':'#fff';g.font='bold 30px Arial';g.textAlign='center';g.fillText(kind===4?'JS':'TS',0,18)}
  else if(kind===6){g.fillStyle='#e8552d';path([[0,-34],[34,0],[0,34],[-34,0]],true);g.strokeStyle='#fff';g.beginPath();g.moveTo(-13,-15);g.lineTo(9,7);g.moveTo(-5,-7);g.lineTo(-5,17);g.stroke();for(const [x,y]of[[-13,-15],[9,7],[-5,17]])dot(x,y,4,'#fff')}
  else if(kind===7){g.fillStyle='#248fcb';path([[-29,-13],[-20,-20],[8,-1],[25,-31],[35,-26],[35,26],[25,31],[8,1],[-20,20],[-29,13],[-10,0]],true)}
- else if(kind===8){g.fillStyle='#26362a';path([[0,-29],[32,27],[-32,27]],true)}
+ else if(kind===8){g.fillStyle='#e5eddf';path([[0,-29],[32,27],[-32,27]],true)}
  else {g.fillStyle='#c44438';g.fillRect(-34,-21,68,42);g.fillStyle='#fff';g.font='bold 27px monospace';g.textAlign='center';g.fillText('npm',0,9)}return c;
  }
  const sprites=names.map((_,i)=>sprite(i)),points=[];
@@ -57,9 +57,9 @@ if(canvas){
  function project(p){const ca=Math.cos(angle),sa=Math.sin(angle),ct=Math.cos(tilt),st=Math.sin(tilt),x=p.x*ca+p.z*sa,z=p.z*ca-p.x*sa;return{x,y:p.y*ct-z*st,z:p.y*st+z*ct}}
  function draw(dt=0){
   ctx.clearRect(0,0,width,height);const radius=Math.min(width*.41,height*.39),cx=width*.52,cy=height*.46;
-  const glow=ctx.createRadialGradient(cx,cy,0,cx,cy,radius*1.15);glow.addColorStop(0,'rgba(232,85,45,.055)');glow.addColorStop(1,'rgba(232,85,45,0)');ctx.fillStyle=glow;ctx.fillRect(0,0,width,height);
+  const glow=ctx.createRadialGradient(cx,cy,0,cx,cy,radius*1.15);glow.addColorStop(0,'rgba(255,134,94,.10)');glow.addColorStop(1,'rgba(232,85,45,0)');ctx.fillStyle=glow;ctx.fillRect(0,0,width,height);
   // Quiet wireframe keeps oceans open and the globe legible from every side.
-  ctx.lineWidth=.65;ctx.strokeStyle='rgba(80,104,78,.14)';
+  ctx.lineWidth=.65;ctx.strokeStyle='rgba(173,202,153,.23)';
   for(let line=0;line<15;line++){ctx.beginPath();let pen=false;for(let i=0;i<=100;i++){const a=i/100*TAU,b=(line<9?(line*20-80)*rad:(line-9)*30*rad);const p=line<9?{x:Math.cos(b)*Math.sin(a),y:-Math.sin(b),z:Math.cos(b)*Math.cos(a)}:{x:Math.sin(b)*Math.cos(a),y:Math.sin(a),z:Math.cos(b)*Math.cos(a)};const q=project(p);if(q.z<0){pen=false;continue}const x=cx+q.x*radius,y=cy+q.y*radius;pen?ctx.lineTo(x,y):ctx.moveTo(x,y);pen=true}ctx.stroke()}
   const projected=points.map(p=>({p,...project(p)})).sort((a,b)=>a.z-b.z);
   for(const q of projected){const x=cx+q.x*radius,y=cy+q.y*radius,dx=x-pointer.x,dy=y-pointer.y,d=Math.hypot(dx,dy);const influence=pointer.active&&q.z>.05?Math.pow(Math.max(0,1-d/110),2):0;

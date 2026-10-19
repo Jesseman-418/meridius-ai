@@ -10,3 +10,36 @@
 
 /* Interactive logo globe */
 .sculpture-stage{contain:layout paint;cursor:grab}.sculpture-stage canvas{touch-action:pan-y}.sculpture-fallback{border:1px solid #9aa68e;box-shadow:inset 0 0 50px #b5c0a944;transform:none;background:repeating-linear-gradient(0deg,transparent 0 29px,#a5af9d55 30px 31px);width:76%;left:14%;top:12%}.motion-control{cursor:pointer}
+
+/* Meridius after dark */
+:root{color-scheme:dark;--paper:#101410;--ink:#f0f1e9;--muted:#b0baab;--line:#384336;--orange:#ff865e}
+::selection{background:#ff865e;color:#101410}
+body{background:var(--paper)}
+.skip-link{background:#f0f1e9;color:#101410}
+a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline-color:#ffad8e}
+.menu-button{color:var(--ink)}
+.navigation .nav-cta{border-color:#7a8874}
+.solid-link{background:var(--orange);color:#151a13}
+.solid-link:hover{background:#ffad8e}
+.motion-control{background:#1b221b;border-color:#56644f;color:#d7dfd1}
+.sculpture-fallback{border-color:#607959;box-shadow:inset 0 0 50px #4b6a4033;background:repeating-linear-gradient(0deg,transparent 0 29px,#6f886044 30px 31px)}
+.project-stage{box-shadow:0 0 0 1px #ffffff12}
+.mini-salon{background:#30242c;color:#f1d8e3}
+.mini-dental{background:#18342f;color:#c7ece0}
+.mini-tutoring{background:#202d43;color:#f3e4bd}
+.mini-retail{background:#293127;color:#e5e9d6}
+.fit{background:#281c17;color:var(--ink);border-block:1px solid #644131}
+.fit>.shell>p em,.fit-signature{color:var(--orange)}
+.fit-bottom p{color:#d5c5bc}
+.fit-bottom .text-link{color:#ffad8e}
+.price-number{color:var(--orange)}
+.site-footer{background:#090d09;color:var(--ink);border-top:1px solid var(--line)}
+.footer-top{border-color:var(--line)}
+.footer-word{color:#b8c6ac}
+.application input,.application textarea,.application select{background:#171e17;border:1px solid #677561;padding:12px 14px;border-radius:5px;color:var(--ink)}
+.application input::placeholder,.application textarea::placeholder{color:#a9b5a3}
+.application select option{background:#171e17;color:var(--ink)}
+.consent input{accent-color:var(--orange);padding:0}
+.form-status:not(:empty){background:#36231e;color:#ffd4c1;border-color:#ff986f}
+#brief-ready{background:#203421;color:#e1eedb;border:1px solid #5c7954}
+@media(max-width:800px){.navigation nav{box-shadow:0 18px 35px #0008}}
