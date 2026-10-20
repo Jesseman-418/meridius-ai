@@ -7,17 +7,17 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&navigation?.classLi
 document.addEventListener('click',e=>{if(navigation?.classList.contains('open')&&!navigation.contains(e.target)&&!menuButton.contains(e.target))closeNavigation()});
 matchMedia('(min-width:801px)').addEventListener('change',()=>closeNavigation());
 document.querySelectorAll('[data-year]').forEach(el=>el.textContent=String(new Date().getFullYear()));
-const form=document.querySelector('#project-brief');let briefURL;
+const form=document.querySelector('#project-brief');
 form?.addEventListener('submit',event=>{
- event.preventDefault();const status=form.querySelector('.form-status'),ready=document.querySelector('#brief-ready');ready.hidden=true;status.textContent='';
- const fields=[...form.querySelectorAll('input:not([type=checkbox]),textarea')];for(const input of fields){input.setCustomValidity(input.required&&!input.value.trim()?'Please complete this field.':'')}
- if(!form.reportValidity()){status.textContent='Please complete the required fields, check your email address, and confirm the investment.';return}
- try{const data=new FormData(form);const content=['MERIDIUS AI — PROJECT BRIEF','Prepared locally. Not submitted to Meridius.','',...['business','name','email','phone','ambition','concept'].map(key=>key.toUpperCase()+': '+(String(data.get(key)||'').trim()||'Not supplied')),'','Investment acknowledged: $999 for the website; $89/month from month two.'].join('\n');
- const nextURL=URL.createObjectURL(new Blob([content],{type:'text/plain;charset=utf-8'}));if(briefURL)URL.revokeObjectURL(briefURL);briefURL=nextURL;document.querySelector('#brief-download').href=briefURL;ready.hidden=false;status.textContent='';ready.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'nearest'});
- }catch(error){status.textContent='Your brief could not be prepared. Please try again. Nothing has been sent.'}
+ const status=form.querySelector('.form-status');
+ for(const input of form.querySelectorAll('input[required]:not([type=checkbox]),textarea[required]')){
+  input.value=input.value.trim();
+  input.setCustomValidity(input.value?'':'Please complete this field.');
+ }
+ if(!form.reportValidity()){event.preventDefault();status.textContent='Please complete the required fields and check your email address.';return}
+ status.textContent='Continuing to the secure submission page… Complete the security check to send your enquiry.';
 });
-form?.addEventListener('input',event=>{event.target.setCustomValidity?.('');document.querySelector('#brief-ready').hidden=true;form.querySelector('.form-status').textContent=''});
-window.addEventListener('pagehide',()=>{if(briefURL)URL.revokeObjectURL(briefURL)});
+form?.addEventListener('input',event=>{event.target.setCustomValidity?.('');form.querySelector('.form-status').textContent=''});
 // Logo continents: local vector sprites on a continuously rotating sphere.
 const canvas=document.querySelector('#meridian');
 if(canvas){
