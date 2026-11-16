@@ -14,4 +14,4 @@
 
 ## Verification results
 
-Pending final browser checks. See pull request for final verification scope.
+All 40 pages passed structural and local link checks. JavaScript syntax and isolated execution checks passed for service selection, concept prefill, email draft, brief download, and local demo confirmation. Visual browser verification is pending an accessible preview.

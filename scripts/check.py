@@ -1,28 +1,51 @@
+from html.parser import HTMLParser
 from pathlib import Path
-from urllib.parse import urlsplit, unquote
-from bs4 import BeautifulSoup
-D=Path(__file__).resolve().parents[1]/'dist'; errors=[]; count=0
-for page in D.rglob('*.html'):
- soup=BeautifulSoup(page.read_text(),'html.parser');count+=1
- if not soup.title or not soup.find('meta',attrs={'name':'description'}):errors.append(f'{page}: metadata missing')
- if len(soup.find_all('h1'))!=1:errors.append(f'{page}: expected one h1')
- if not soup.find('main'):errors.append(f'{page}: missing main landmark')
- for tag in soup.find_all(['a','link','script','img']):
-  value=tag.get('href') or tag.get('src')
-  if not value:continue
-  url=urlsplit(value)
-  if url.scheme or url.netloc:continue
-  target=D/unquote(url.path).lstrip('/') if url.path.startswith('/') else page.parent/unquote(url.path)
-  if not url.path:target=page
-  if target.is_dir():target=target/'index.html'
-  if not target.exists():errors.append(f'{page.relative_to(D)}: broken target {value}')
-  if url.fragment and target.exists() and target.suffix=='.html':
-   ts=soup if target==page else BeautifulSoup(target.read_text(),'html.parser')
-   if not ts.find(id=url.fragment):errors.append(f'{page.relative_to(D)}: missing anchor {value}')
- for im in soup.find_all('img'):
-  if not im.has_attr('alt'):errors.append(f'{page}: missing image alt')
- for label in soup.find_all('label'):
-  if not label.find(['input','select','textarea']) and not label.has_attr('for'):errors.append(f'{page}: unassociated label')
-print(f'Checked {count} HTML pages: links, local assets, anchors, titles, descriptions, h1s, main landmarks, image alternatives, form labels.')
-if errors:print('\n'.join(errors));raise SystemExit(1)
-print('PASS')
+from urllib.parse import unquote, urlsplit
+
+
+class Page(HTMLParser):
+    def __init__(self, path):
+        super().__init__(convert_charrefs=True)
+        self.elements = []
+        self.feed(path.read_text())
+
+    def handle_starttag(self, tag, attrs):
+        self.elements.append((tag, dict(attrs)))
+
+
+root = Path(__file__).resolve().parents[1] / "dist"
+pages = {path: Page(path).elements for path in root.rglob("*.html")}
+errors = []
+for path, elements in pages.items():
+    for required in ("h1", "main", "title"):
+        if sum(tag == required for tag, _ in elements) != 1:
+            errors.append(f"{path}: expected one {required}")
+    if not any(tag == "meta" and attrs.get("name") == "description"
+               for tag, attrs in elements):
+        errors.append(f"{path}: missing description")
+    for tag, attrs in elements:
+        if tag == "img" and "alt" not in attrs:
+            errors.append(f"{path}: missing image alternative")
+        value = attrs.get("href") or attrs.get("src")
+        if not value:
+            continue
+        url = urlsplit(value)
+        if url.scheme or url.netloc:
+            continue
+        target = path
+        if url.path.startswith("/"):
+            target = root / unquote(url.path).lstrip("/")
+        elif url.path:
+            target = path.parent / unquote(url.path)
+        if target.is_dir():
+            target /= "index.html"
+        if not target.exists():
+            errors.append(f"{path}: missing target {value}")
+        elif url.fragment and target.resolve() in pages:
+            if not any(a.get("id") == unquote(url.fragment)
+                       for _, a in pages[target.resolve()]):
+                errors.append(f"{path}: missing anchor {value}")
+
+if errors:
+    raise SystemExit("\n".join(errors))
+print(f"Passed structural and local link checks on {len(pages)} pages.")

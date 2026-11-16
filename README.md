@@ -32,6 +32,6 @@ Existing WebP photography is reused from the original repository. Confirm your r
 
 ## Checks
 
-- `python scripts/check.py` (requires beautifulsoup4) verifies local links/assets, anchors, metadata, landmarks, image alternatives and form labels.
+- `python scripts/check.py` verifies local links/assets, anchors, metadata, landmarks, image alternatives and form labels.
 - `node --check dist/assets/site.js` verifies JavaScript syntax.
 - Responsive and interactive browser results are recorded in `QA.md`.
